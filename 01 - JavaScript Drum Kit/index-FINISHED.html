@@ -51,6 +51,8 @@
   <audio data-key="65" src="sounds/clap.wav"></audio>
   <audio data-key="83" src="sounds/hihat.wav"></audio>
   <audio data-key="68" src="sounds/kick.wav"></audio>
+  <!-- <audio data-key="70" src="urmom"></audio> --> 
+  <!-- Will select the above first with querySelector -->
   <audio data-key="70" src="sounds/openhat.wav"></audio>
   <audio data-key="71" src="sounds/boom.wav"></audio>
   <audio data-key="72" src="sounds/ride.wav"></audio>
@@ -67,6 +69,8 @@
   function playSound(e) {
     const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
     const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    console.log(audio, key);
+    
     if (!audio) return;
 
     key.classList.add('playing');
@@ -74,8 +78,11 @@
     audio.play();
   }
 
-  const keys = Array.from(document.querySelectorAll('.key'));
-  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  // puts all classes with "key" into an array
+  const keys = Array.from(document.querySelectorAll('.key')); // all are printed as "div.key", each of which have sub data. Each "key" is as DOM (Document Object Model) element.
+  console.log(keys + typeof(keys));
+  // Looks for the key that has "ended its transition", then does the method `removeTransition`
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition)); // 'transitioned' is an Event Type. Only learned through others' code or documentation.
   window.addEventListener('keydown', playSound);
 </script>
 

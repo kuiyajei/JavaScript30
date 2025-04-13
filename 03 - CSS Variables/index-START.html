@@ -1,52 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Scoped CSS Variables and JS</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
-  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Scoped CSS Variables and JS</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <h2>Update CSS Variables with <span class="hl">JS</span></h2>
 
-  <div class="controls">
-    <label for="spacing">Spacing:</label>
-    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+    <div class="controls">
+      <label for="spacing">Spacing:</label>
+      <input
+        id="spacing"
+        type="range"
+        name="spacing"
+        min="10"
+        max="200"
+        value="10"
+        data-sizing="px"
+      />
 
-    <label for="blur">Blur:</label>
-    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+      <label for="blur">Blur:</label>
+      <input
+        id="blur"
+        type="range"
+        name="blur"
+        min="0"
+        max="25"
+        value="10"
+        data-sizing="px"
+      />
 
-    <label for="base">Base Color</label>
-    <input id="base" type="color" name="base" value="#ffc600">
-  </div>
+      <label for="base">Base Color</label>
+      <input id="base" type="color" name="base" value="#ffc600" />
+    </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+    <img src="./rahh.png" />
 
-  <style>
+    <style>
+      /* Applies the following for all img elements, and bases their value on the root variables */
+      img {
+        padding: var(--spacing);
+        background: var(--base);
+        filter: blur(var(--blur));
+      }
 
-    /*
+      :root {
+        --base: #ffc600;
+        --spacing: 10px;
+        --blur: 10px;
+      }
+
+      /*
       misc styles, nothing to do with CSS variables
     */
 
-    body {
-      text-align: center;
-      background: #193549;
-      color: white;
-      font-family: 'helvetica neue', sans-serif;
-      font-weight: 100;
-      font-size: 50px;
-    }
+      body {
+        text-align: center;
+        background: #193549;
+        color: white;
+        font-family: "helvetica neue", sans-serif;
+        font-weight: 100;
+        font-size: 50px;
+      }
 
-    .controls {
-      margin-bottom: 50px;
-    }
+      .controls {
+        margin-bottom: 50px;
+      }
 
-    input {
-      width: 100px;
-    }
-  </style>
+      input {
+        width: 100px;
+      }
+    </style>
 
-  <script>
-  </script>
+    <script>
+      //🔍 assigns the (1) class with 'controls' (div) and (2) 'input' elements
+      const inputs = document.querySelectorAll(".controls input");
 
-</body>
+      /*
+      //👂 event listener looks for any changes at real time, but does NOT look at movement
+      //🔍 we get all the inputs, and for each of them, check to see changes
+      inputs.forEach(input => input.addEventListener('change', function(handleUpdate){
+        console.log(this.value) // "this" refers to the input element that triggered the 'change' event
+      }))
+      */
+
+      //🔍 same as above, but tracks mouse movement events
+      inputs.forEach((input) =>
+        input.addEventListener("mousemove", function (handleUpdate) {
+          /************* 
+          Step 1: Since not all values have "px" (aka HEX color), we can make use of the custom 
+          attribute (data-)'sizing'. This attribute is made for the purpose of correcting the value
+          assignment.
+          
+          We extract this so we can solely concatenate px as the suffix IF the input has that attribute.
+          ************/
+
+         // ⚠️ Dataset is something you can use to check the attributes where you have `data-`
+         // Hence, "sizing" here is immediately recognized as `data-sizing` from `this` element
+         // where the event has been triggered
+          let suffix = this.dataset.sizing || ``; // Set (for padding and blur) or NOTHING (for the HEX value)
+
+          /**********
+          * Step 2: Set the property of X variable to the value we will set it with.
+          * 
+          *********/
+
+          // In this (HTML) document...
+          // ...in its Element(s)
+          // ...in its Style Element in particular... 
+          // do the following in parameteres --(variable) = (value + suffix)
+          document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+
+          /*************
+           * LONG AHH EXPLANATION
+           *
+           * We are unable to edit 'this' input that's edited unless it has a name. 
+           * That's why we need the attribute 'name' for each of the input element.
+           * While we can probably base the edit based on which sequence of input 
+           * goes first, ultimately, we need to be able to read this schmuzzle.
+           * 
+           *************/
+          // document.documentElement.style.setProperty(`--${this.name}`)
+        })
+      );
+    </script>
+  </body>
 </html>

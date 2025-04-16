@@ -45,10 +45,21 @@
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
 
+    /* By default, `sort()` sorts elements as strings alphabetically. 
+    * However, you can provide a _comparison function_ to customize the sorting logic.
+    *
+    * Think of `a` and `b` here as placeholders.
+    */
+
+    const ordered = inventors.sort((a, b) => a.year > b.year ? 1 : -1);
+    console.table(ordered);
+
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
 
     // 5. Sort the inventors by years lived
+
+    // Skipping this sh** for now. Too daunting. Want to move on. Next.
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
